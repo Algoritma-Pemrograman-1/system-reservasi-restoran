@@ -192,11 +192,11 @@ void createReservation()
     case 1:
         while (1) {
             printf("Silahkan pilih meja yang diinginkan: \n");
-            for (int i = 0; i < 3; i++) {
-                printf("%i.) Meja untuk %i orang\n", i + 1, i + 2);
-            }
+            printf("1.) Meja untuk 2 orang\n");
+            printf("2.) Meja untuk 4 orang\n");
+            printf("3.) Meja untuk 6 orang\n");
             printf("Mohon pilih nomor antara 1, 2, dan 3: ");
-            validInputMeja = scanf("%d", &meja);
+            validInputMeja = scanf("%i", &meja);
 
             if (!validInputMeja || meja > 3 || meja < 1) {
                 printf("Input tidak valid! \n");
@@ -260,7 +260,7 @@ void createReservation()
     } while (orderAgain == 'y');
 
     reservationCount++;
-    printf("Reservasi Telah Ditambahkan!");
+    printf("Reservasi Telah Ditambahkan!\n");
 }
 
 int viewReservation()
@@ -298,7 +298,7 @@ int deleteReservation()
     return 0;
 }
 
-void handleTableType(Reservation *reservation, int meja, int tempat, int nomor) {
+void handleTableType(Reservation *reservation, int tempat, int meja, int nomor) {
     switch (tempat)
     {
     case 1:
@@ -325,6 +325,7 @@ void handleTableType(Reservation *reservation, int meja, int tempat, int nomor) 
         break;
     
     default:
+        printf("%d, %d", meja, tempat);
         printf("Input Tidak Valid");
         break;
     }
