@@ -265,6 +265,12 @@ void createReservation()
 
 int viewReservation()
 {
+    if(reservationCount == 0) {
+        printf("Reservasi Kosong! \n");
+
+        return 0;
+    }
+
     printf("------- Daftar Reservasi -------\n");
     for (int i = 0; i < reservationCount; i++) {
         printf(
@@ -292,9 +298,48 @@ int viewReservation()
     return 0;
 }
 
-int deleteReservation()
-{
-    printf("Delete");
+int deleteReservation() {
+    int reservationNum;
+
+    if(reservationCount == 0) {
+        printf("Reservasi kosong!\n");
+        return 0;
+    }
+
+    printf("------ Daftar Reservasi ------\n");
+    for (int i = 0; i < reservationCount; i++) {
+        printf("%d. Atas nama %s, Tipe %s (%s) No %s, Pada tanggal: %02s/%02s/%s jam %02s:%02s\n", 
+            i + 1, 
+            reservation[i].nama,
+            reservation[i].meja_info.tempat, 
+            reservation[i].meja_info.tipeMeja,
+            reservation[i].meja_info.no_meja,
+            reservation[i].date.tanggal,
+            reservation[i].date.bulan,
+            reservation[i].date.tahun,
+            reservation[i].date.jam,
+            reservation[i].date.menit
+        );
+    }
+    printf("------------------------------\n");
+
+    while (1)
+    {
+        printf("Masukkan nomor reservasi yang ingin di hapus: ");
+        scanf("%d", &reservationNum);
+
+        if (reservationNum < 1 || reservationNum > reservationCount) {
+            printf("Maaf no reservasi yang dimasukkan tidak terdaftar\n");   
+        } else {
+            for (int i = reservationNum - 1; i < reservationCount - 1; i++) {
+                reservation[i] = reservation[i + 1];
+            }
+            reservationCount--;
+        
+            printf("Reservasi no %d, Telah di hapus!\n", reservationNum);
+            break;
+        }
+    }
     return 0;
 }
 
