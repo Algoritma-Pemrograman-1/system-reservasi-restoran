@@ -2,6 +2,7 @@
 
 #define MAX_RESERVATIONS 100
 #define MAX_ORDER_ITEMS 5
+#define MAX_FOODS 10
 
 typedef struct
 {
@@ -38,14 +39,17 @@ char *fourthTable[] = {"Meja 4.1", "Meja 4.2", "Meja 4.3", "Meja 4.4", "Meja 4.5
 char *sixthTable[] = {"Meja 6.1", "Meja 6.2"};
 
 Reservation reservation[MAX_RESERVATIONS];
-FoodMenus foodMenu[10] = {
-    {"Makanan A", 20000},
-    {"Makanan B", 20000},
-    {"Makanan C", 20000},
-    {"Makanan D", 20000},
-    {"Minuman A", 20000},
-    {"Minuman B", 20000},
-    {"Minuman C", 20000},
+FoodMenus foodMenu[MAX_FOODS] = {
+    {"Nasi Goreng Digidaw Special", 40000},
+    {"Sayap Ayam Kecewa", 35000},
+    {"Mie Rebus Tak Terduga", 10000},
+    {"Steak Gaji UMR", 95000},
+    {"Pancake Jomblo Bahagia", 30000},
+    {"Es Krim Tanggal Tua", 25000},
+    {"Teh Panas Sabar", 18000},
+    {"Es Kelapa Muda Tpi Boong", 20000},
+    {"Es Jeruk Kok Jadi Es Batu?", 18000},
+    {"Air Putih Simpel Tapi Berarti", 5000},
 };
 
 
@@ -65,48 +69,56 @@ int reservationCount = 0;
 int main(void)
 {
     int user_choices;
+    int isValidUserChoises;
 
     do
     {
-        printf("Reservasi Restoran Digidaw \n");
+        printf("\nReservasi Restoran Digidaw \n");
         printf("1. Tambah Reservasi \n");
         printf("2. Lihat Reservasi \n");
         printf("3. Hapus Reservasi \n");
         printf("4. Keluar \n");
         printf("Pilih 1 - 4: ");
 
-        scanf("%d", &user_choices);
+        isValidUserChoises = scanf("%d", &user_choices);
 
-        switch (user_choices)
-        {
-        case 1:
-            createReservation();
-            break;
-        case 2:
-            viewReservation();
-            break;
-        case 3:
-            deleteReservation();
-            break;
-        case 4:
-            printf("Terima kasih telah datang! \n");
-            break;
+        if(!isValidUserChoises) {
+            printf("\nInput yang anda masukkan tidak valid!\n");
+            while (getchar() != '\n');
+        } else {
+            switch (user_choices) {
+            case 1:
+                createReservation();
+                break;
+            case 2:
+                viewReservation();
+                break;
+            case 3:
+                deleteReservation();
+                break;
+            case 4:
+                printf("Terima kasih telah datang! \n");
+                break;
 
-        default:
-            printf("Menu yang anda pilih tidak valid! \n");
+            default:
+                printf("Menu yang anda pilih tidak valid! \n");
+            }
         }
 
-    } while (user_choices != 4);
+
+    } while (user_choices != 4 || !isValidUserChoises);
 
     return 0;
 }
 
 void displayMenu()
 {
-    printf("Silahkan Pilih Menu Makanan \n");
-    for (int i = 0; i < 7; i++)
-    {
-        printf("%d. %s - Rp. %2.f\n", i + 1, foodMenu[i].nama, foodMenu[i].harga);
+    printf("Silahkan Pilih Menu Makanan\n");
+    printf("-------------------------------------------------------------------\n");
+    printf("%-3s %-40s %-10s\n", "No", "Nama Makanan", "Harga");
+    printf("-------------------------------------------------------------------\n");
+    for (int i = 0; i < MAX_FOODS; i++) {
+        printf("%-3d %-40s Rp. %-10.2f\n", i + 1, foodMenu[i].nama, foodMenu[i].harga);
     }
 }
 
@@ -235,16 +247,16 @@ void createReservation()
     do
     {
         displayMenu();
-        printf("Pilih Menu Makanan 1 - 7: ");
+        printf("Pilih Menu Makanan 1 - %i: ", MAX_FOODS);
         int menuChoice;
         scanf("%d", &menuChoice);
 
-        if(menuChoice < 1 || menuChoice > 7) {
+        if(menuChoice < 1 || menuChoice > MAX_FOODS) {
             printf("Input Tidak Valid");
             continue;
         }
 
-        strcpy(reservation[reservationCount].orders[orderCount], foodMenu[menuChoice].nama);
+        strcpy(reservation[reservationCount].orders[orderCount], foodMenu[menuChoice - 1].nama);
 
         reservation[reservationCount].totalCost += foodMenu[menuChoice - 1].harga;
         orderCount++;
